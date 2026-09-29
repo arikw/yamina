@@ -36,10 +36,31 @@
     <div class="case" id="nested-en">const answer = 42; // English inside Hebrew</div>
   </div>
 
+  <p class="label">A message made of paragraphs — the box itself stays; each paragraph decides for itself</p>
+  <div class="case" id="paras">
+    <p id="para-he">הפסקה הראשונה של ההודעה כתובה בעברית.</p>
+    <p id="para-en">The second paragraph of the same message is in English.</p>
+  </div>
+
+  <p class="label">Loose Hebrew text with an English paragraph inside — the box flips, the paragraph stays left</p>
+  <div class="case" id="loose">טקסט עברי שנמצא ישירות בתוך הקופסה, לא בתוך פסקה.
+    <p id="loose-en">But this paragraph inside it is English.</p>
+  </div>
+
+  <p class="label">A Hebrew list and heading inside an English box — they flip, the box stays</p>
+  <div class="case" id="list-box">Shopping list:
+    <h3 id="heading-he">רשימת קניות</h3>
+    <ul>
+      <li id="li-he">חלב ולחם</li>
+      <li id="li-en">Coffee beans</li>
+    </ul>
+  </div>
+
   <p class="label">Editable box — flips once what you type is mostly Hebrew</p>
   <div class="case" id="typing" contenteditable="true">Type here in Hebrew — the box should flip once it's mostly Hebrew.</div>
 
-  <p><button id="add">Add a Hebrew chat message</button> <button id="add-en">Add an English one</button></p>
+  <p><button id="add">Add a Hebrew chat message</button> <button id="add-en">Add an English one</button>
+    <button id="add-many">Add 500 messages (infinite-scroll test)</button></p>
   <div id="log"></div>
 
   <script>
@@ -52,6 +73,9 @@
       document.getElementById('log').append(d);
     };
     document.getElementById('add').onclick = () => add(`הודעה חדשה מספר ${n + 1}, נוספה אחרי שהדף נטען.`);
+    document.getElementById('add-many').onclick = () => {
+      for (let i = 0; i < 500; i++) add(i % 2 ? `Message ${n + 1} in English.` : `הודעה ${n + 1} בעברית.`);
+    };
     document.getElementById('add-en').onclick = () => add(`New message number ${n + 1}, added after load.`);
   </script>
 </body>

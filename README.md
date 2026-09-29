@@ -1,19 +1,26 @@
 # Yamina – Auto RTL for Hebrew & Arabic
 
 A Chrome extension. Click its toolbar button on a site to switch it on there:
-every `<div>` whose text is mostly (over 50%) Hebrew or Arabic letters is set
-right-to-left and right-aligned. Click again to switch it off.
+every text block — `<div>`, `<p>`, `<li>`, heading, `<blockquote>` — whose
+text is mostly (over 50%) Hebrew or Arabic letters is set right-to-left and
+right-aligned. Click again to switch it off.
 
 - **Per site** = per hostname (`mail.google.com` and `gmail.com` are separate).
   A site stays on across visits and browser restarts until you switch it off.
-- **Only a div's own text counts** — text inside nested divs is left out.
-  Otherwise a page-wide wrapper would flip whenever the page is mostly Hebrew
-  and mirror the whole site's layout. Wrappers with no text of their own are
+- **Each block is judged by its own text** — text inside nested blocks is left
+  out. So a message whose text all sits in paragraphs is left alone and each
+  paragraph gets its own direction (a Hebrew paragraph and an English one in
+  the same message both come out right), and a page-wide wrapper never flips
+  just because the page is mostly Hebrew. Blocks with no text of their own are
   never touched.
 - **Letters only** — spaces, digits, punctuation and emoji don't count either way.
 - An English block inside a flipped Hebrew one is set back to left-to-right.
-- Keeps working as the page changes (chat messages arriving, typing into an
-  editable box).
+- Keeps working as the page changes (chat messages arriving, infinite scroll,
+  typing into an editable box). One observer for the whole page queues only
+  the blocks that changed; they're checked in the browser's idle time, a few
+  milliseconds at a time, so scrolling and typing never wait on it (within a
+  second at most, even on a page that's never idle).
+- A flipped list item keeps its bullet inside it, on the right.
 - The button shows **ON** where it's active, and **!** on pages it can't run on
   (browser pages like `chrome://`, the Web Store, local files).
 
@@ -44,9 +51,10 @@ reload the tab.
 - `manifest.json` — Manifest V3.
 - `background.js` — the toolbar button: asks for / gives back the site, keeps
   the script registered for exactly the granted sites, shows the badge.
-- `content.js` — the behavior on the page: checking the divs, watching the page
-  for changes.
+- `content.js` — the behavior on the page: checking the blocks, watching the
+  page for changes.
 - `icons/` — drawn by `tools/make-icons.py` (Python standard library only).
-- `test/demo.html` — one example per rule. Serve it over HTTP to try it (the
+- `test/demo.html` — one example per rule, plus a button that adds 500
+  messages at once. Serve it over HTTP to try it (the
   extension doesn't run on local files), e.g. `python3 -m http.server` in this
   folder, then open `http://localhost:8000/test/demo.html`.
