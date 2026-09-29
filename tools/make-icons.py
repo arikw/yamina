@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Draws the toolbar icons (icons/icon{16,32,48,128}.png): a blue rounded
-square with white right-aligned lines. Standard library only.
+square with white right-aligned lines — plus store/icon-128.png, the same art
+at 96x96 inside a 128x128 canvas, as the Chrome Web Store asks for its icon.
+Standard library only.
 
     python3 tools/make-icons.py
 """
@@ -29,12 +31,13 @@ def on_line(x, y):
     return any(left <= x <= 0.80 and abs(y - yc) <= THICK / 2 for yc, left in LINES)
 
 
-def pixel(px, py, size):
+def pixel(px, py, size, pad):
     bg = fg = 0
     for sy in range(SAMPLES):
         for sx in range(SAMPLES):
-            x = (px + (sx + 0.5) / SAMPLES) / size
-            y = (py + (sy + 0.5) / SAMPLES) / size
+            # `pad` is the empty margin on each side, as a fraction of the canvas.
+            x = ((px + (sx + 0.5) / SAMPLES) / size - pad) / (1 - 2 * pad)
+            y = ((py + (sy + 0.5) / SAMPLES) / size - pad) / (1 - 2 * pad)
             if inside_rounded(x, y):
                 if on_line(x, y):
                     fg += 1
@@ -49,9 +52,9 @@ def pixel(px, py, size):
     return (*rgb, round(alpha * 255))
 
 
-def png(size):
+def png(size, pad=0.0):
     raw = b''.join(
-        b'\x00' + bytes(c for px in range(size) for c in pixel(px, py, size))
+        b'\x00' + bytes(c for px in range(size) for c in pixel(px, py, size, pad))
         for py in range(size))
 
     def chunk(kind, data):
@@ -64,8 +67,11 @@ def png(size):
 
 
 if __name__ == '__main__':
-    out = os.path.join(os.path.dirname(__file__), '..', 'icons')
+    root = os.path.join(os.path.dirname(__file__), '..')
     for size in (16, 32, 48, 128):
-        with open(os.path.join(out, f'icon{size}.png'), 'wb') as f:
+        with open(os.path.join(root, 'icons', f'icon{size}.png'), 'wb') as f:
             f.write(png(size))
         print(f'icons/icon{size}.png')
+    with open(os.path.join(root, 'store', 'icon-128.png'), 'wb') as f:
+        f.write(png(128, pad=16 / 128))
+    print('store/icon-128.png')

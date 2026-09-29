@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Store screenshot — document</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Hebrew:wght@400;600;700&family=Noto+Sans+Mono&display=block">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; width: 1280px; height: 800px; overflow: hidden;
+    font: 16px/1.55 "Noto Sans", "Noto Sans Hebrew", sans-serif;
+    background: linear-gradient(160deg, #eef3fb, #dde7f7);
+    color: #1c2430;
+    padding: 36px 48px;
+  }
+  .title { text-align: center; margin: 0 0 24px; }
+  .title h1 { margin: 0; font-size: 30px; }
+  .title p { margin: 4px 0 0; color: #4a5566; font-size: 18px; }
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .label { font-weight: 700; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 10px 4px; }
+  .before .label { color: #9a4b00; }
+  .after .label { color: #1a7f37; }
+  .page { background: #fff; border-radius: 14px; box-shadow: 0 10px 30px rgb(30 50 90 / .12); padding: 26px 30px; height: 610px; overflow: hidden; }
+  .page h2 { margin: 0 0 10px; font-size: 24px; }
+  .page p { margin: 0 0 12px; }
+  .page ul { margin: 0 0 12px; padding-left: 22px; }
+  pre { margin: 0 0 12px; padding: 10px 14px; border-radius: 8px; background: #f3f5f8; font: 14px/1.5 "Noto Sans Mono", monospace; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <h1>Each paragraph gets its own direction</h1>
+    <p>Hebrew paragraphs turn right-to-left; English ones and code stay left-to-right.</p>
+  </div>
+  <div class="panels">
+    <section class="before"><p class="label">Without Yamina</p><div class="page"></div></section>
+    <section class="after"><p class="label">With Yamina</p><div class="page"></div></section>
+  </div>
+  <script>
+    const doc = `
+      <h2>סיכום פגישה: השקת הגרסה החדשה</h2>
+      <p>בפגישה הוחלט להשיק את הגרסה החדשה ביום ראשון בבוקר, אחרי סבב בדיקות אחרון.</p>
+      <p>The release notes will be published in English as well.</p>
+      <ul>
+        <li>לעדכן את מסמך ההתקנה.</li>
+        <li>לבדוק את הטפסים בדפדפנים השונים.</li>
+        <li>Prepare the announcement email.</li>
+      </ul>
+      <p>הפקודה להרצת הבדיקות:</p>
+      <pre>npm run test -- --coverage</pre>
+      <p>שאלות? אפשר לכתוב בערוץ של הצוות.</p>`;
+    document.querySelectorAll('.page').forEach(p => { p.innerHTML = doc; });
+  </script>
+  <script src="common.js"></script>
+</body>
+</html>

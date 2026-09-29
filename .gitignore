@@ -8,3 +8,6 @@ Thumbs.db
 *.zip
 *.crx
 *.pem
+
+# Built packages
+dist/

@@ -57,6 +57,9 @@ reload the tab.
 - `content.js` — the behavior on the page: checking the blocks, watching the
   page for changes.
 - `icons/` — drawn by `tools/make-icons.py` (Python standard library only).
+- `tools/pack.sh` — builds `dist/yamina-<version>.zip` for the Chrome Web Store.
+- `store/` — the store listing: images and `LISTING.md` (every field's text).
+- `PRIVACY.md` — privacy policy (no data collected).
 - `test/demo.html` — one example per rule, plus a button that adds 500
   messages at once. Serve it over HTTP to try it (the
   extension doesn't run on local files), e.g. `python3 -m http.server` in this
