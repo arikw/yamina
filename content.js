@@ -19,10 +19,14 @@
   const MARK = 'data-yamina'; // "rtl" or "ltr" on every block that has letters of its own
   const STYLE_ID = 'yamina-style';
 
-  // Letters only: spaces, digits, punctuation and emoji don't count either way.
-  // The lookahead leaves out Hebrew/Arabic vowel marks, which aren't letters.
-  const LETTER = /\p{L}/gu;
-  const RTL_LETTER = /(?=\p{L})[\p{Script=Hebrew}\p{Script=Arabic}]/gu;
+  // Counts words, not letters: English words run longer and Hebrew leaves out
+  // most vowels, so letter counts lean English ("maybe watch occasionally"
+  // has more English letters than a Hebrew sentence around it). A word is a
+  // run of letters in one script, so "כwatch" is two words, "כ" and "watch";
+  // vowel marks stay inside their word. Digits, punctuation and emoji don't count.
+  const RTL = '\\p{Script=Hebrew}\\p{Script=Arabic}';
+  const WORD = new RegExp(`(?:(?=\\p{L})[${RTL}]\\p{M}*)+|(?:(?![${RTL}])\\p{L}\\p{M}*)+`, 'gu');
+  const RTL_WORD = new RegExp(`^[${RTL}]`, 'u');
 
   // An English block inside a Hebrew one would inherit right-to-left, so it is
   // marked "ltr" and set back. A flipped list item keeps its bullet inside it:
@@ -51,10 +55,10 @@
 
   function check(block) {
     const text = ownText(block);
-    const letters = text.match(LETTER)?.length || 0;
-    if (!letters) { block.removeAttribute(MARK); return; }
-    const rtl = text.match(RTL_LETTER)?.length || 0;
-    block.setAttribute(MARK, rtl / letters > 0.5 ? 'rtl' : 'ltr');
+    const words = text.match(WORD) || [];
+    if (!words.length) { block.removeAttribute(MARK); return; }
+    const rtl = words.filter(w => RTL_WORD.test(w)).length;
+    block.setAttribute(MARK, rtl / words.length > 0.5 ? 'rtl' : 'ltr');
   }
 
   // ---- checking in the browser's idle time ----

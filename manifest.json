@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Yamina – Auto RTL for Hebrew & Arabic",
   "short_name": "Yamina",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Right-aligns Hebrew and Arabic text on the sites you switch it on for.",
   "permissions": ["activeTab", "scripting"],
   "optional_host_permissions": ["*://*/*"],

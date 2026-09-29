@@ -2,7 +2,7 @@
 
 A Chrome extension. Click its toolbar button on a site to switch it on there:
 every text block — `<div>`, `<p>`, `<li>`, heading, `<blockquote>` — whose
-text is mostly (over 50%) Hebrew or Arabic letters is set right-to-left and
+text is mostly (over half its words) Hebrew or Arabic is set right-to-left and
 right-aligned. Click again to switch it off.
 
 - **Per site** = per hostname (`mail.google.com` and `gmail.com` are separate).
@@ -13,7 +13,10 @@ right-aligned. Click again to switch it off.
   the same message both come out right), and a page-wide wrapper never flips
   just because the page is mostly Hebrew. Blocks with no text of their own are
   never touched.
-- **Letters only** — spaces, digits, punctuation and emoji don't count either way.
+- **Counts words, not letters** — English words run longer and Hebrew leaves
+  out most vowels, so counting letters leans English. A word is a run of
+  letters in one script (`כwatch` is two words). Digits, punctuation and emoji
+  don't count either way.
 - An English block inside a flipped Hebrew one is set back to left-to-right.
 - Keeps working as the page changes (chat messages arriving, infinite scroll,
   typing into an editable box). One observer for the whole page queues only
