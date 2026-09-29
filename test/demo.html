@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Yamina demo</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 720px; margin: 24px auto; padding-inline: 16px; }
+    .case { border: 1px solid #ccc; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+    .label { font-size: 12px; color: #777; margin: 14px 0 2px; }
+    #log .msg { background: #f3f3f3; border-radius: 6px; padding: 6px 10px; margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <h1>Yamina demo</h1>
+  <p>Turn the extension on for this page, and every box marked "should flip" moves to the right.</p>
+
+  <p class="label">English — stays</p>
+  <div class="case" id="en">This paragraph is all English, so it stays left-aligned.</div>
+  <p class="label">Hebrew — should flip</p>
+  <div class="case" id="he">זו פסקה בעברית. היא אמורה לעבור לימין, והנקודה בסוף אמורה להיות בצד הנכון.</div>
+  <p class="label">Arabic — should flip</p>
+  <div class="case" id="ar">هذه فقرة باللغة العربية ويجب أن تنتقل إلى اليمين.</div>
+  <p class="label">Mostly Hebrew with a few English words — should flip</p>
+  <div class="case" id="mostly-he">שלחתי את ה-pull request אתמול, תבדוק כשיש לך זמן.</div>
+  <p class="label">Mostly English with a Hebrew word — stays</p>
+  <div class="case" id="mostly-en">The meeting about the new design is on Sunday, בסדר?</div>
+
+  <p class="label">Wrapper div (no text of its own) — stays; the boxes inside decide for themselves</p>
+  <div class="case" id="wrapper">
+    <div class="case" id="inner-he">שורה בעברית בתוך קופסה עוטפת.</div>
+    <div class="case" id="inner-en">An English line inside the same wrapper.</div>
+  </div>
+
+  <p class="label">Hebrew box with an English box inside — the inner one stays left</p>
+  <div class="case" id="nested">הנה קטע קוד שמצאתי:
+    <div class="case" id="nested-en">const answer = 42; // English inside Hebrew</div>
+  </div>
+
+  <p class="label">Editable box — flips once what you type is mostly Hebrew</p>
+  <div class="case" id="typing" contenteditable="true">Type here in Hebrew — the box should flip once it's mostly Hebrew.</div>
+
+  <p><button id="add">Add a Hebrew chat message</button> <button id="add-en">Add an English one</button></p>
+  <div id="log"></div>
+
+  <script>
+    let n = 0;
+    const add = text => {
+      const d = document.createElement('div');
+      d.className = 'msg';
+      d.id = 'msg' + ++n;
+      d.textContent = text;
+      document.getElementById('log').append(d);
+    };
+    document.getElementById('add').onclick = () => add(`הודעה חדשה מספר ${n + 1}, נוספה אחרי שהדף נטען.`);
+    document.getElementById('add-en').onclick = () => add(`New message number ${n + 1}, added after load.`);
+  </script>
+</body>
+</html>
